@@ -1,3 +1,12 @@
+/* Estilos gerais */
+body {
+    font-family: "Exo 2", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
 /* Estilos do cabeçalho personalizado */
 .header {
     display: flex;
@@ -53,6 +62,31 @@
     border-radius: 0 20px 20px 0;
     background-color: #f8f8f8;
     cursor: pointer;
+}
+
+/* Estilo do botão do formulário */
+.form-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem 1rem;
+    background-color: #263851;
+    color: white;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    margin-left: 1rem;
+    font-family: "Exo 2", sans-serif;
+    font-size: 0.9rem;
+}
+
+.form-button:hover {
+    background-color: #1a2a3a;
+}
+
+.form-button i {
+    font-size: 1rem;
 }
 
 /* Estilos principais */
@@ -263,17 +297,46 @@ footer {
     
     .header {
         flex-wrap: wrap;
-        padding: 0.5rem;
         gap: 0.5rem;
+        padding: 0.5rem;
     }
     
     .search-bar {
         order: 3;
-        flex-grow: 1;
         min-width: 100%;
     }
     
     .thumbnails {
-        grid-template-columns: 1fr;
+        display: flex !important; /* Sobrescreve o grid em mobile */
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        -webkit-overflow-scrolling: touch;
+        grid-template-columns: unset !important; /* Remove o grid */
+    }
+
+    .thumbnail {
+        scroll-snap-align: start;
+        flex: 0 0 150px !important; /* Largura fixa para cada thumbnail */
+        width: 150px !important;
+    }
+
+    /* Barra de scroll personalizada (opcional) */
+    .thumbnails::-webkit-scrollbar {
+        height: 4px;
+    }
+    .thumbnails::-webkit-scrollbar-thumb {
+        background: #263851;
+        border-radius: 2px;
+    }
+    .form-button {
+        order: 2;
+        margin-left: auto;
+        padding: 0.5rem;
+    }
+    
+    .form-button span {
+        display: none;
     }
 }

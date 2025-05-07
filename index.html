@@ -12,13 +12,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Cabeçalho Personalizado -->
     <header class="header">
         <div class="logo-container">
             <img src="img/logo-civico.PNG" alt="Minha Logo" class="logo-img">
             <span class="logo-text">PortalOLIVO</span>
         </div>
-        
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSd7XYkz64onGwvQgvPrcLUWwsUi8H1kZkvdtF3wl7l9v_Q2KA/viewform?usp=dialog" class="form-button" target="_blank">
+            <i class="fas fa-file-alt"></i>
+            <span>Formulário para Postagem</span>
+        </a>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Pesquisar vídeos..." class="search-input">
             <button id="searchBtn" class="search-button">
@@ -27,7 +29,6 @@
         </div>
     </header>
     
-    <!-- Conteúdo Principal -->
     <main>
         <div class="video-container">
             <div class="video-player-container">
@@ -36,10 +37,8 @@
             <div class="video-info">
                 <div class="video-header">
                     <h2 id="videoTitle">Selecione um vídeo</h2>
-                    <span id="videoTag" class="video-tag"></span>
                 </div>
                 <div class="video-meta">
-                    <p id="videoAuthor" class="video-author"></p>
                     <p id="videoDescription" class="video-description"></p>
                 </div>
                 <div class="download-section">
@@ -61,7 +60,7 @@
     </main>
 
     <footer>
-        <img src="img/logo-civico.PNG" alt="Foto Logo Cívico Militar" class="footer-logo">
+        <img src="img/logo-civico.PNG" alt="Logo Cívico Militar" class="footer-logo">
         <p>Todos os direitos reservados ao Colégio Cívico Militar Olivo Fracaro &copy; 2025</p>
     </footer>
     <script src="script.js"></script>

@@ -85,128 +85,66 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoThumbnails = document.getElementById('videoThumbnails');
     const categories = document.querySelectorAll('.category');
 
-    // Ícones para tipos de arquivo
-    const fileIcons = {
-        'pdf': 'file-pdf',
-        'docx': 'file-word',
-        'xlsx': 'file-excel',
-        'png': 'file-image',
-        'jpg': 'file-image',
-        'default': 'file-download'
-    };
-
-    // Carrega a lista de vídeos
+    // Carrega os vídeos
     function loadVideoLists() {
-        loadVideoCategory('aulas', videoThumbnails);
-    }
-
-    // Carrega vídeos de uma categoria específica
-    function loadVideoCategory(category, container) {
-        container.innerHTML = '';
-        
-        videoData[category].forEach(video => {
+        videoThumbnails.innerHTML = '';
+        videoData.aulas.forEach(video => {
             const thumbnail = document.createElement('div');
             thumbnail.className = 'thumbnail';
             thumbnail.innerHTML = `
                 <img src="${video.thumbnail}" alt="${video.title}">
                 <h4>${video.title}</h4>
             `;
-            
             thumbnail.addEventListener('click', () => playVideo(video));
-            container.appendChild(thumbnail);
+            videoThumbnails.appendChild(thumbnail);
         });
     }
 
-    // Reproduz um vídeo no iframe
+    // Reproduz o vídeo selecionado
     function playVideo(video) {
         mainVideo.src = video.url;
         videoTitle.textContent = video.title;
         videoDescription.textContent = video.description;
         
-        downloadLinks.innerHTML = '';
-        
-        if (video.downloads && video.downloads.length > 0) {
-            video.downloads.forEach(download => {
-                const fileExtension = download.url.split('.').pop().toLowerCase();
-                const iconClass = fileIcons[fileExtension] || fileIcons['default'];
-                
-                const link = document.createElement('a');
-                link.href = download.url;
-                link.className = 'download-link';
-                link.innerHTML = `
-                    <i class="fas fa-${download.icon || iconClass}"></i>
+        // Atualiza os downloads
+        downloadLinks.innerHTML = video.downloads.length > 0
+            ? video.downloads.map(download => `
+                <a href="${download.url}" class="download-link" download>
+                    <i class="fas fa-${download.icon}"></i>
                     <span>${download.name}</span>
-                    <i class="fas fa-download download-icon"></i>
-                `;
-                link.setAttribute('download', '');
-                link.setAttribute('title', `Baixar ${download.name}`);
-                
-                downloadLinks.appendChild(link);
-            });
-        } else {
-            downloadLinks.innerHTML = '<p class="no-downloads">Nenhum material disponível para download.</p>';
-        }
+                </a>
+            `).join('')
+            : '<p class="no-downloads">Nenhum material disponível.</p>';
     }
 
-    // Filtra vídeos baseado na busca
+    // Filtra vídeos
     function searchVideos() {
-        const searchTerm = searchInput.value.toLowerCase();
-        if (searchTerm.trim() === '') {
-            loadVideoLists();
-            return;
-        }
-        
-        const filteredVideos = videoData.aulas.filter(video => 
-            video.title.toLowerCase().includes(searchTerm) || 
-            video.description.toLowerCase().includes(searchTerm)
+        const term = searchInput.value.toLowerCase();
+        const filtered = videoData.aulas.filter(video => 
+            video.title.toLowerCase().includes(term) || 
+            video.description.toLowerCase().includes(term)
         );
         
-        loadFilteredVideos(filteredVideos, videoThumbnails);
-    }
-
-    // Carrega vídeos filtrados
-    function loadFilteredVideos(videosToLoad, container) {
-        container.innerHTML = '';
-        
-        if (videosToLoad.length === 0) {
-            container.innerHTML = '<p class="no-downloads">Nenhum vídeo encontrado.</p>';
-            return;
-        }
-        
-        videosToLoad.forEach(video => {
-            const thumbnail = document.createElement('div');
-            thumbnail.className = 'thumbnail';
-            thumbnail.innerHTML = `
-                <img src="${video.thumbnail}" alt="${video.title}">
-                <h4>${video.title}</h4>
-            `;
-            
-            thumbnail.addEventListener('click', () => playVideo(video));
-            container.appendChild(thumbnail);
-        });
+        videoThumbnails.innerHTML = filtered.length > 0
+            ? filtered.map(video => `
+                <div class="thumbnail" onclick="playVideo(${JSON.stringify(video).replace(/"/g, '&quot;')}">
+                    <img src="${video.thumbnail}" alt="${video.title}">
+                    <h4>${video.title}</h4>
+                </div>
+            `).join('')
+            : '<p class="no-downloads">Nenhum vídeo encontrado.</p>';
     }
 
     // Event listeners
     searchBtn.addEventListener('click', searchVideos);
-    searchInput.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') {
-            searchVideos();
-        }
-    });
-
-    // Toggle das categorias
+    searchInput.addEventListener('keyup', (e) => e.key === 'Enter' && searchVideos());
     categories.forEach(category => {
-        const header = category.querySelector('.category-header');
-        header.addEventListener('click', () => {
+        category.querySelector('.category-header').addEventListener('click', () => {
             category.classList.toggle('active');
         });
     });
 
-    // Carrega o primeiro vídeo automaticamente
-    if (videoData.aulas.length > 0) {
-        playVideo(videoData.aulas[0]);
-    }
-
-    // Carrega as listas iniciais de vídeos
+    // Inicialização
     loadVideoLists();
+    if (videoData.aulas.length > 0) playVideo(videoData.aulas[0]);
 });
